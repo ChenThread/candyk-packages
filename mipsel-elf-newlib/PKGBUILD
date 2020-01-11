@@ -18,8 +18,12 @@ prepare() {
 
 build() {
 	cd "newlib-$pkgver"/build
+	CFLAGS_FOR_TARGET="-Os -G0" \
 	../configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
-		--enable-lto
+		--enable-lto \
+		--with-float=soft \
+		--disable-nls \
+		--disable-multilib
 
 	make
 }

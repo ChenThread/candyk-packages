@@ -19,7 +19,7 @@ build() {
 	../configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
 		--disable-multilib --disable-nls --enable-lto \
 		--enable-plugins --with-mmap --disable-shared \
-		--disable-gold --disable-werror
+		--disable-gold --disable-werror --with-float=soft
 	make configure-host
 	make LDFLAGS="-all-static"
 }
