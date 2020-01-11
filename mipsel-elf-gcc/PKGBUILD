@@ -9,7 +9,8 @@ _islver=0.21
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=("i686" "x86_64")
-depends=("mipsel-elf-binutils")
+depends=(runtime-musl mipsel-elf-binutils)
+makedepends=(runtime-musl-devel)
 url="https://gcc.gnu.org"
 license=("GPL-3.0-or-later")
 source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
@@ -17,12 +18,16 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"http://isl.gforge.inria.fr/isl-$_islver.tar.bz2"
+	"0003-gcc-poison-system-directories.patch"
         "gcc-9.2.0-fix-91474.patch")
+
+. "../runtime-musl/env.sh"
 
 prepare() {
 	mkdir -p "gcc-$pkgver-build"
 	cd "gcc-$pkgver"
 	patch -p2 <../gcc-9.2.0-fix-91474.patch
+	patch -p1 <../0003-gcc-poison-system-directories.patch
 
 	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
 	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
@@ -35,16 +40,19 @@ prepare() {
 
 build() {
 	cd "gcc-$pkgver"-build
-	LDFLAGS="$LDFLAGS -static" ../"gcc-$pkgver"/configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
+	../"gcc-$pkgver"/configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
 		--with-sysroot="/opt/candyk/arch/mipsel-elf" \
+		--with-bugurl="http://candyk.asie.pl" \
 		--enable-languages=c,c++,lto \
+		--with-stage1-ldflags="$_runtimeldflags" \
+		--disable-bootstrap \
 		--disable-gcov \
 		--disable-multilib \
+		--disable-nls \
 		--disable-shared \
 		--disable-werror \
-		--disable-nls \
 		--enable-lto \
-		--enable-plugins \
+		--enable-poison-system-directories \
 		--disable-libstdcxx-pch \
 		--disable-libunwind-exceptions \
 		--with-float=soft \
@@ -75,4 +83,5 @@ md5sums=('3818ad8600447f05349098232c2ddc78'
          '320fbc4463d4c8cb1e566929d8adc4f8'
          '4125404e41e482ec68282a2e687f6c73'
          'e2be862b79d74234e468981bcae2a964'
+         '31d894a6d46d58b40f26525cd67ce1a4'
          '9ea5dbe2e44366e14eb00c895ab2caff')

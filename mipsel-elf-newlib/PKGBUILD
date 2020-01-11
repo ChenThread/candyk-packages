@@ -12,24 +12,24 @@ source=("ftp://sourceware.org/pub/newlib/newlib-$pkgver.tar.gz")
 options=(!strip)
 
 prepare() {
-	cd "newlib-$pkgver"
-	mkdir -v build
+	mkdir -p "newlib-$pkgver-build"
 }
 
 build() {
-	cd "newlib-$pkgver"/build
-	CFLAGS_FOR_TARGET="-Os -G0" \
-	../configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
+	cd "newlib-$pkgver"-build
+	../"newlib-$pkgver"/configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
 		--enable-lto \
 		--with-float=soft \
 		--disable-nls \
-		--disable-multilib
+		--disable-multilib \
+		--enable-newlib-nano-malloc \
+		--enable-newlib-reent-small
 
 	make
 }
 
 package() {
-	cd "newlib-$pkgver"/build
+	cd "newlib-$pkgver"-build
 	make DESTDIR="$pkgdir" install
 }
 

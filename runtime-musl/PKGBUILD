@@ -1,0 +1,42 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=(runtime-musl runtime-musl-devel)
+pkgver=1.1.24
+pkgrel=1
+epoch=
+pkgdesc="musl runtime"
+arch=("i686" "x86_64")
+url="http://www.musl-libc.org"
+license=("MIT")
+source=("https://www.musl-libc.org/releases/musl-1.1.24.tar.gz")
+
+prepare() {
+	mkdir -p "musl-$pkgver-build"
+}
+
+build() {
+	cd "musl-$pkgver"-build
+	../"musl-$pkgver"/configure --prefix=/opt/candyk/runtime \
+		--syslibdir=/opt/candyk/runtime/lib
+	make
+}
+
+package_runtime-musl() {
+	cd "musl-$pkgver"-build
+	mkdir -p "$pkgdir"/opt/candyk/runtime/bin
+	mkdir -p "$pkgdir"/opt/candyk/runtime/lib
+	cp lib/*.so "$pkgdir"/opt/candyk/runtime/lib/
+	ln -s ../lib/libc.so "$pkgdir"/opt/candyk/runtime/bin/ldd
+	ln -s libc.so "$pkgdir"/opt/candyk/runtime/lib/ld-musl-$CARCH.so.1
+}
+
+package_runtime-musl-devel() {
+	pkgdesc="musl runtime development files"
+	depends=(runtime-musl)
+
+	cd "musl-$pkgver"-build
+	make DESTDIR="$pkgdir" install
+	rm "$pkgdir"/opt/candyk/runtime/lib/*.so
+	rm "$pkgdir"/opt/candyk/runtime/lib/*.so.*
+}
+
+md5sums=('2ac378736ea749b073a3795abb095329')
