@@ -1,0 +1,32 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=mipsel-elf-binutils
+pkgver=2.33.1
+pkgrel=1
+epoch=
+pkgdesc="GNU binary utilities"
+arch=("i686" "x86_64")
+url="http://www.gnu.org/software/binutils"
+license=("GPL-3.0-or-later")
+source=("http://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz")
+
+prepare() {
+	cd "binutils-$pkgver"
+	mkdir -v build
+}
+
+build() {
+	cd "binutils-$pkgver"/build
+	../configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
+		--disable-multilib --disable-nls --enable-lto \
+		--enable-plugins --with-mmap --disable-shared \
+		--disable-gold --disable-werror
+	make configure-host
+	make LDFLAGS="-all-static"
+}
+
+package() {
+	cd "binutils-$pkgver"/build
+	make DESTDIR="$pkgdir" install
+	rm "$pkgdir"/opt/candyk/arch/mipsel-elf/share/info/dir
+}
+md5sums=('9406231b7d9dd93731c2d06cefe8aaf1')

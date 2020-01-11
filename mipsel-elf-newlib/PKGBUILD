@@ -1,0 +1,32 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=mipsel-elf-newlib
+pkgver=3.2.0
+pkgrel=1
+epoch=
+pkgdesc="C library for embedded systems"
+arch=("i686" "x86_64")
+depends=("mipsel-elf-binutils" "mipsel-elf-gcc")
+url="https://sourceware.org/newlib"
+license=("GPL-3.0-or-later")
+source=("ftp://sourceware.org/pub/newlib/newlib-$pkgver.tar.gz")
+options=(!strip)
+
+prepare() {
+	cd "newlib-$pkgver"
+	mkdir -v build
+}
+
+build() {
+	cd "newlib-$pkgver"/build
+	../configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
+		--enable-lto
+
+	make
+}
+
+package() {
+	cd "newlib-$pkgver"/build
+	make DESTDIR="$pkgdir" install
+}
+
+md5sums=('afb3a01c8c82b6717ea55659a4de30ec')

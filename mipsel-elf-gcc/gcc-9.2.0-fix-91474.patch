@@ -1,0 +1,20 @@
+--- branches/gcc-9-branch/gcc/config/mips/mips.c	2019/10/04 10:40:47	276568
++++ branches/gcc-9-branch/gcc/config/mips/mips.c	2019/10/04 10:57:48	276569
+@@ -4849,7 +4849,7 @@
+      can forward SRC for DEST.  This is most useful if the next insn is a
+      simple store.   */
+   rtx_insn *insn = (rtx_insn *)insn_;
+-  struct mips_address_info addr;
++  struct mips_address_info addr = {};
+   if (insn)
+     {
+       rtx_insn *next = next_nonnote_nondebug_insn_bb (insn);
+@@ -4862,7 +4862,7 @@
+ 		{
+ 		  rtx tmp = XEXP (src, 0);
+ 		  mips_classify_address (&addr, tmp, GET_MODE (tmp), true);
+-		  if (REGNO (addr.reg) != REGNO (dest))
++		  if (addr.reg && REGNO (addr.reg) != REGNO (dest))
+ 		    validate_change (next, &SET_SRC (set), src, false);
+ 		}
+ 	      else

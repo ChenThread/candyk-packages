@@ -1,0 +1,63 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=(mipsel-elf-gcc mipsel-elf-gcc-libs)
+pkgver=9.2.0
+pkgrel=1
+epoch=
+pkgdesc="The GNU Compiler Collection"
+arch=("i686" "x86_64")
+depends=("mipsel-elf-binutils")
+url="https://gcc.gnu.org"
+license=("GPL-3.0-or-later")
+source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
+        "gcc-9.2.0-fix-91474.patch")
+
+prepare() {
+	cd "gcc-$pkgver"
+	mkdir -v build
+	patch -p2 <../gcc-9.2.0-fix-91474.patch
+
+	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
+	sed -i "s/\*-rtems\*/*-unknown*/" libstdc++-v3/configure
+}
+
+build() {
+	cd "gcc-$pkgver"/build
+	LDFLAGS="$LDFLAGS -static" ../configure --prefix=/opt/candyk/arch/mipsel-elf --target=mipsel-elf \
+		--enable-languages=c,c++,lto \
+		--enable-__cxa_atexit \
+		--disable-multilib \
+		--disable-shared \
+		--with-stage1-ldflags=-static --with-boot-ldflags=-static \
+		--disable-werror \
+		--disable-nls \
+		--enable-lto \
+		--enable-plugins \
+		--disable-libquadmath \
+		--disable-libssp \
+		--disable-libstdcxx-pch \
+		--disable-libunwind-exceptions \
+		--disable-target-libiberty \
+		--with-isl \
+		--with-system-zlib
+
+	make all-gcc all-target-libgcc all-target-libstdc++-v3
+}
+
+package_mipsel-elf-gcc() {
+	cd "gcc-$pkgver"/build
+	make DESTDIR="$pkgdir" install-gcc
+	rm "$pkgdir"/opt/candyk/arch/mipsel-elf/share/info/dir
+}
+
+package_mipsel-elf-gcc-libs() {
+	pkgdesc="GCC-provided libraries"
+	depends=("mipsel-elf-binutils" "mipsel-elf-gcc" "mipsel-elf-newlib")
+	options=(!strip)
+
+	cd "gcc-$pkgver"/build
+	make DESTDIR="$pkgdir" install-target-libgcc install-target-libstdc++-v3
+	rm "$pkgdir"/opt/candyk/arch/mipsel-elf/lib/gcc/mipsel-elf/9.2.0/include/unwind.h
+}
+
+md5sums=('3818ad8600447f05349098232c2ddc78'
+         '9ea5dbe2e44366e14eb00c895ab2caff')
