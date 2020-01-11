@@ -1,5 +1,5 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
-pkgname=mipsel-elf-binutils
+pkgname=candyk-mipsel-elf-binutils
 pkgver=2.33.1
 pkgrel=1
 epoch=
@@ -8,10 +8,11 @@ arch=("i686" "x86_64")
 url="http://www.gnu.org/software/binutils"
 license=("GPL-3.0-or-later")
 source=("http://ftp.gnu.org/gnu/binutils/binutils-$pkgver.tar.xz")
-depends=(runtime-musl)
-makedepends=(runtime-musl-devel)
+depends=(candyk-runtime-musl)
+makedepends=(candyk-runtime-musl-devel)
+groups=(candyk-mipsel-elf-toolchain)
 
-. "../runtime-musl/env.sh"
+. "../candyk-runtime-musl/env.sh"
 
 prepare() {
 	mkdir -p "binutils-$pkgver-build"

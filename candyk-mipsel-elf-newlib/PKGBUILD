@@ -1,15 +1,16 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
-pkgname=mipsel-elf-newlib
+pkgname=candyk-mipsel-elf-newlib
 pkgver=3.2.0
 pkgrel=1
 epoch=
 pkgdesc="C library for embedded systems"
 arch=("i686" "x86_64")
-depends=("mipsel-elf-binutils" "mipsel-elf-gcc")
+depends=("candyk-mipsel-elf-binutils" "candyk-mipsel-elf-gcc")
 url="https://sourceware.org/newlib"
 license=("GPL-3.0-or-later")
 source=("ftp://sourceware.org/pub/newlib/newlib-$pkgver.tar.gz")
 options=(!strip)
+groups=(candyk-mipsel-elf-toolchain)
 
 prepare() {
 	mkdir -p "newlib-$pkgver-build"

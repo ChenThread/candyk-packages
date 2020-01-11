@@ -1,5 +1,5 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
-pkgname=(runtime-musl runtime-musl-devel)
+pkgname=(candyk-runtime-musl candyk-runtime-musl-devel)
 pkgver=1.1.24
 pkgrel=1
 epoch=
@@ -20,7 +20,7 @@ build() {
 	make
 }
 
-package_runtime-musl() {
+package_candyk-runtime-musl() {
 	cd "musl-$pkgver"-build
 	mkdir -p "$pkgdir"/opt/candyk/runtime/bin
 	mkdir -p "$pkgdir"/opt/candyk/runtime/lib
@@ -29,9 +29,9 @@ package_runtime-musl() {
 	ln -s libc.so "$pkgdir"/opt/candyk/runtime/lib/ld-musl-$CARCH.so.1
 }
 
-package_runtime-musl-devel() {
+package_candyk-runtime-musl-devel() {
 	pkgdesc="musl runtime development files"
-	depends=(runtime-musl)
+	depends=(candyk-runtime-musl)
 
 	cd "musl-$pkgver"-build
 	make DESTDIR="$pkgdir" install

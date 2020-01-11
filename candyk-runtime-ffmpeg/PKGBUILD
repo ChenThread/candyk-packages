@@ -1,7 +1,7 @@
 # TODO: trim down decoder/parser/demuxer/bsf list
 
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
-pkgname=(runtime-ffmpeg runtime-ffmpeg-devel)
+pkgname=(candyk-runtime-ffmpeg candyk-runtime-ffmpeg-devel)
 pkgver=4.2.2
 pkgrel=1
 epoch=
@@ -10,10 +10,10 @@ arch=("i686" "x86_64")
 url="http://www.ffmpeg.org"
 license=("MIT")
 source=("https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz")
-depends=(runtime-musl)
-makedepends=(runtime-musl-devel)
+depends=(candyk-runtime-musl)
+makedepends=(candyk-runtime-musl-devel)
 
-. "../runtime-musl/env.sh"
+. "../candyk-runtime-musl/env.sh"
 
 build() {
 	cd "ffmpeg-$pkgver"
@@ -43,16 +43,16 @@ build() {
 	make LDFLAGS="$_runtimeldflags"
 }
 
-package_runtime-ffmpeg() {
+package_candyk-runtime-ffmpeg() {
 	cd "ffmpeg-$pkgver"
 	make DESTDIR="$pkgdir" install
 	cd "$pkgdir"/opt/candyk/runtime
 	rm -r include share lib/pkgconfig
 }
 
-package_runtime-ffmpeg-devel() {
+package_candyk-runtime-ffmpeg-devel() {
 	pkgdesc="ffmpeg runtime development files"
-	depends=(runtime-ffmpeg)
+	depends=(candyk-runtime-ffmpeg)
 
 	cd "ffmpeg-$pkgver"
 	make DESTDIR="$pkgdir" install

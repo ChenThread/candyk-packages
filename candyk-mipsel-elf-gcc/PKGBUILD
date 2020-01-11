@@ -1,5 +1,5 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
-pkgname=(mipsel-elf-gcc mipsel-elf-gcc-libs)
+pkgname=(candyk-mipsel-elf-gcc candyk-mipsel-elf-gcc-libs)
 pkgver=9.2.0
 pkgrel=1
 _gmpver=6.1.2
@@ -9,8 +9,9 @@ _islver=0.21
 epoch=
 pkgdesc="The GNU Compiler Collection"
 arch=("i686" "x86_64")
-depends=(runtime-musl mipsel-elf-binutils)
-makedepends=(runtime-musl-devel)
+depends=(candyk-runtime-musl candyk-mipsel-elf-binutils)
+makedepends=(candyk-runtime-musl-devel)
+groups=(candyk-mipsel-elf-toolchain)
 url="https://gcc.gnu.org"
 license=("GPL-3.0-or-later")
 source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
@@ -21,7 +22,7 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
 	"0003-gcc-poison-system-directories.patch"
         "gcc-9.2.0-fix-91474.patch")
 
-. "../runtime-musl/env.sh"
+. "../candyk-runtime-musl/env.sh"
 
 prepare() {
 	mkdir -p "gcc-$pkgver-build"
@@ -62,15 +63,15 @@ build() {
 	make
 }
 
-package_mipsel-elf-gcc() {
+package_candyk-mipsel-elf-gcc() {
 	cd "gcc-$pkgver"-build
 	make DESTDIR="$pkgdir" install-gcc install-libcc1
 	rm "$pkgdir"/opt/candyk/arch/mipsel-elf/share/info/dir
 }
 
-package_mipsel-elf-gcc-libs() {
+package_candyk-mipsel-elf-gcc-libs() {
 	pkgdesc="GCC-provided libraries"
-	depends=("mipsel-elf-binutils" "mipsel-elf-gcc" "mipsel-elf-newlib")
+	depends=("candyk-mipsel-elf-binutils" "candyk-mipsel-elf-gcc" "candyk-mipsel-elf-newlib")
 	options=(!strip)
 
 	cd "gcc-$pkgver"-build

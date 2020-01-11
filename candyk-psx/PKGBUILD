@@ -10,9 +10,9 @@ url="http://candyk.asie.pl"
 license=("zlib")
 groups=(candyk-psx)
 source=("candyk-psx::git+https://github.com/ChenThread/candyk-psx.git#commit=$_commit")
-makedepends=(runtime-musl-devel)
+makedepends=(candyk-runtime-musl-devel)
 
-. "../runtime-musl/env.sh"
+. "../candyk-runtime-musl/env.sh"
 
 prepare() {
 	cd "candyk-psx"
@@ -27,7 +27,7 @@ build() {
 }
 
 package_candyk-psx-libs() {
-	depends=(mipsel-elf-newlib)
+	depends=(candyk-mipsel-elf-gcc-libs candyk-mipsel-elf-newlib)
 	options=(!strip)
 
 	cd "candyk-psx"
@@ -37,7 +37,7 @@ package_candyk-psx-libs() {
 }
 
 package_candyk-psx-tools() {
-	depends=(runtime-musl)
+	depends=(candyk-runtime-musl candyk-runtime-ffmpeg)
 
 	cd "candyk-psx"
 	mkdir -p "$pkgdir"/opt/candyk/platform/psx
