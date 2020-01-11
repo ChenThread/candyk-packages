@@ -1,0 +1,55 @@
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=(candyk-psx-libs candyk-psx-tools candyk-psx-examples)
+pkgver=20200111
+_commit=174397f6ec5aa5d51cee98a56756ec6107073134
+pkgrel=1
+epoch=
+pkgdesc="candyk PSX toolchain"
+arch=("i686" "x86_64")
+url="http://candyk.asie.pl"
+license=("zlib")
+groups=(candyk-psx)
+source=("candyk-psx::git+https://github.com/ChenThread/candyk-psx.git#commit=$_commit")
+makedepends=(runtime-musl-devel)
+
+. "../runtime-musl/env.sh"
+
+prepare() {
+	cd "candyk-psx"
+	rm bin/dummy
+	rm lib/dummy
+	sed -i -e "s/NATIVE_LDFLAGS =/NATIVE_LDFLAGS = ${_runtimeldflags//\//\\/}/" Makefile
+}
+
+build() {
+	cd "candyk-psx"
+	make
+}
+
+package_candyk-psx-libs() {
+	depends=(mipsel-elf-newlib)
+	options=(!strip)
+
+	cd "candyk-psx"
+	mkdir -p "$pkgdir"/opt/candyk/platform/psx
+	cp -Rv include "$pkgdir"/opt/candyk/platform/psx/
+	cp -Rv lib "$pkgdir"/opt/candyk/platform/psx/
+}
+
+package_candyk-psx-tools() {
+	depends=(runtime-musl)
+
+	cd "candyk-psx"
+	mkdir -p "$pkgdir"/opt/candyk/platform/psx
+	cp -Rv bin "$pkgdir"/opt/candyk/platform/psx/
+}
+
+package_candyk-psx-examples() {
+	depends=(candyk-psx-libs)
+
+	cd "candyk-psx"
+	mkdir -p "$pkgdir"/opt/candyk/platform/psx
+	cp -Rv examples "$pkgdir"/opt/candyk/platform/psx/
+}
+
+md5sums=('SKIP')

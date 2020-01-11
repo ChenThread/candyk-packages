@@ -1,0 +1,63 @@
+# TODO: trim down decoder/parser/demuxer/bsf list
+
+# Maintainer: Adrian Siekierka <kontakt@asie.pl>
+pkgname=(runtime-ffmpeg runtime-ffmpeg-devel)
+pkgver=4.2.2
+pkgrel=1
+epoch=
+pkgdesc="ffmpeg video library"
+arch=("i686" "x86_64")
+url="http://www.ffmpeg.org"
+license=("MIT")
+source=("https://www.ffmpeg.org/releases/ffmpeg-$pkgver.tar.xz")
+depends=(runtime-musl)
+makedepends=(runtime-musl-devel)
+
+. "../runtime-musl/env.sh"
+
+build() {
+	cd "ffmpeg-$pkgver"
+	./configure \
+		--prefix="/opt/candyk/runtime" \
+		--disable-static --enable-shared \
+		--disable-gpl --disable-version3 \
+		--disable-programs --disable-network \
+		--disable-autodetect --disable-iconv \
+		--disable-doc \
+		--disable-avfilter --disable-postproc \
+		--disable-encoders --disable-filters \
+		--disable-hwaccels --disable-muxers \
+		--disable-indevs --disable-outdevs \
+		--disable-protocols \
+		--disable-demuxers --disable-decoders \
+		--disable-bsfs --disable-parsers \
+		--enable-decoder=ffv1,ffvhuff,huffyuv,vp8,vp9 \
+		--enable-decoder=mjpeg,bmp,png,flac,vorbis,theora \
+		--enable-decoder=rawvideo,pcm_f16le,pcm_f32le,pcm_s16le \
+		--enable-decoder=pcm_u16le,pcm_mulaw,pcm_alaw,pcm_u8,pcm_s8 \
+		--enable-decoder=opus \
+		--enable-parser=bmp,flac,mjpeg,opus,png,vorbis,vp8,vp9 \
+		--enable-demuxer=apng,avi,flac,matroska,ogg,wav \
+		--enable-demuxer=pcm_alaw,pcm_s16le,pcm_u16le,pcm_s8,pcm_u8 \
+		--enable-demuxer=mov
+	make LDFLAGS="$_runtimeldflags"
+}
+
+package_runtime-ffmpeg() {
+	cd "ffmpeg-$pkgver"
+	make DESTDIR="$pkgdir" install
+	cd "$pkgdir"/opt/candyk/runtime
+	rm -r include share lib/pkgconfig
+}
+
+package_runtime-ffmpeg-devel() {
+	pkgdesc="ffmpeg runtime development files"
+	depends=(runtime-ffmpeg)
+
+	cd "ffmpeg-$pkgver"
+	make DESTDIR="$pkgdir" install
+	cd "$pkgdir"/opt/candyk/runtime
+	rm -r lib/*.so lib/*.so.*
+}
+
+md5sums=('348956fc2faa57a2f79bbb84ded9fbc3')
