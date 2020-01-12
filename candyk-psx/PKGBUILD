@@ -1,8 +1,8 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(candyk-psx-libs candyk-psx-tools candyk-psx-examples)
 pkgver=20200111
-_commit=174397f6ec5aa5d51cee98a56756ec6107073134
-pkgrel=1
+_commit=6a2de5d244c5c36adb3cada9b114e0b2bb119d25
+pkgrel=2
 epoch=
 pkgdesc="candyk PSX toolchain"
 arch=("i686" "x86_64")

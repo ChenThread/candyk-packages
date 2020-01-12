@@ -3,7 +3,7 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(candyk-runtime-ffmpeg candyk-runtime-ffmpeg-devel)
 pkgver=4.2.2
-pkgrel=1
+pkgrel=2
 epoch=
 pkgdesc="ffmpeg video library"
 arch=("i686" "x86_64")
@@ -25,12 +25,7 @@ build() {
 		--disable-autodetect --disable-iconv \
 		--disable-doc \
 		--disable-avfilter --disable-postproc \
-		--disable-encoders --disable-filters \
-		--disable-hwaccels --disable-muxers \
-		--disable-indevs --disable-outdevs \
-		--disable-protocols \
-		--disable-demuxers --disable-decoders \
-		--disable-bsfs --disable-parsers \
+		--disable-everything \
 		--enable-decoder=ffv1,ffvhuff,huffyuv,vp8,vp9 \
 		--enable-decoder=mjpeg,bmp,png,flac,vorbis,theora \
 		--enable-decoder=rawvideo,pcm_f16le,pcm_f32le,pcm_s16le \
@@ -39,7 +34,8 @@ build() {
 		--enable-parser=bmp,flac,mjpeg,opus,png,vorbis,vp8,vp9 \
 		--enable-demuxer=apng,avi,flac,matroska,ogg,wav \
 		--enable-demuxer=pcm_alaw,pcm_s16le,pcm_u16le,pcm_s8,pcm_u8 \
-		--enable-demuxer=mov
+		--enable-demuxer=image2,mov,rawvideo \
+		--enable-protocol=file
 	make LDFLAGS="$_runtimeldflags"
 }
 
