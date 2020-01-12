@@ -45,7 +45,7 @@ build() {
 		--with-sysroot="/opt/candyk/arch/mipsel-elf" \
 		--with-bugurl="http://candyk.asie.pl" \
 		--enable-languages=c,c++,lto \
-		--with-stage1-ldflags="$_runtimeldflags" \
+		--with-stage1-ldflags="$_runtimeldflags -static-libgcc -static-libstdc++" \
 		--disable-bootstrap \
 		--disable-gcov \
 		--disable-multilib \
