@@ -1,6 +1,6 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(candyk-mipsel-elf-gcc candyk-mipsel-elf-gcc-libs)
-pkgver=9.2.0
+pkgver=9.3.0
 pkgrel=1
 _gmpver=6.1.2
 _mpfrver=4.0.2
@@ -19,15 +19,13 @@ source=("http://ftp.gnu.org/gnu/gcc/gcc-$pkgver/gcc-$pkgver.tar.xz"
         "http://www.mpfr.org/mpfr-$_mpfrver/mpfr-$_mpfrver.tar.xz"
         "http://ftp.gnu.org/gnu/mpc/mpc-$_mpcver.tar.gz"
 	"http://isl.gforge.inria.fr/isl-$_islver.tar.bz2"
-	"0003-gcc-poison-system-directories.patch"
-        "gcc-9.2.0-fix-91474.patch")
+	"0003-gcc-poison-system-directories.patch")
 
 . "../candyk-runtime-musl/env.sh"
 
 prepare() {
 	mkdir -p "gcc-$pkgver-build"
 	cd "gcc-$pkgver"
-	patch -p2 <../gcc-9.2.0-fix-91474.patch
 	patch -p1 <../0003-gcc-poison-system-directories.patch
 
 	# HACK: hijack RTEMS's libstdc++ crossconfig for our own purposes (which has the dynamic feature checks we want)
@@ -79,10 +77,11 @@ package_candyk-mipsel-elf-gcc-libs() {
 	rm "$pkgdir"/opt/candyk/arch/mipsel-elf/lib/gcc/mipsel-elf/$pkgver/include/unwind.h
 }
 
-md5sums=('3818ad8600447f05349098232c2ddc78'
-         'f58fa8001d60c4c77595fbbb62b63c1d'
-         '320fbc4463d4c8cb1e566929d8adc4f8'
-         '4125404e41e482ec68282a2e687f6c73'
-         'e2be862b79d74234e468981bcae2a964'
-         '31d894a6d46d58b40f26525cd67ce1a4'
-         '9ea5dbe2e44366e14eb00c895ab2caff')
+sha256sums=(
+	'71e197867611f6054aa1119b13a0c0abac12834765fe2d81f35ac57f84f742d1'
+	'87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912'
+	'1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a'
+	'6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e'
+	'd18ca11f8ad1a39ab6d03d3dcb3365ab416720fcb65b42d69f34f51bf0a0e859'
+	'bcdf0c9837557be871e885d25cebb61e3b4856e8c3dae735fe66398ba1d1b0c4'
+)

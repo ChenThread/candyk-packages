@@ -1,6 +1,6 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=candyk-mipsel-elf-binutils
-pkgver=2.33.1
+pkgver=2.34
 pkgrel=1
 epoch=
 pkgdesc="GNU binary utilities"
@@ -36,4 +36,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 	rm "$pkgdir"/opt/candyk/arch/mipsel-elf/share/info/dir
 }
-md5sums=('9406231b7d9dd93731c2d06cefe8aaf1')
+sha256sums=('f00b0e8803dc9bab1e2165bd568528135be734df3fabf8d0161828cd56028952')

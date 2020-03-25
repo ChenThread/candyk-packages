@@ -1,6 +1,6 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=candyk-mipsel-elf-newlib
-pkgver=3.2.0
+pkgver=3.3.0
 pkgrel=1
 epoch=
 pkgdesc="C library for embedded systems"
@@ -24,7 +24,8 @@ build() {
 		--disable-nls \
 		--disable-multilib \
 		--enable-newlib-nano-malloc \
-		--enable-newlib-reent-small
+		--enable-newlib-reent-small \
+		--disable-newlib-reent-check-verify
 
 	make
 }
@@ -34,4 +35,4 @@ package() {
 	make DESTDIR="$pkgdir" install
 }
 
-md5sums=('afb3a01c8c82b6717ea55659a4de30ec')
+sha256sums=('58dd9e3eaedf519360d92d84205c3deef0b3fc286685d1c562e245914ef72c66')
