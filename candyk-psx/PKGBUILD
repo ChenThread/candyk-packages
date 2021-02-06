@@ -1,8 +1,8 @@
 # Maintainer: Adrian Siekierka <kontakt@asie.pl>
 pkgname=(candyk-psx-libs candyk-psx-tools candyk-psx-examples)
-pkgver=20200111
-_commit=6a2de5d244c5c36adb3cada9b114e0b2bb119d25
-pkgrel=2
+pkgver=20210206
+_commit=5d91befa855a25d1d158cc8a8c799935d4155d66
+pkgrel=1
 epoch=
 pkgdesc="candyk PSX toolchain"
 arch=("i686" "x86_64")
@@ -16,6 +16,7 @@ makedepends=(candyk-runtime-musl-devel)
 
 prepare() {
 	cd "candyk-psx"
+	git checkout "$_commit"
 	rm bin/dummy
 	rm lib/dummy
 	sed -i -e "s/NATIVE_LDFLAGS =/NATIVE_LDFLAGS = ${_runtimeldflags//\//\\/}/" Makefile
